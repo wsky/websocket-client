@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import jp.a840.websocket.exception.WebSocketException;
-import jp.a840.websocket.auth.win32.SpengoAuthenticator;
 
 /**
  * The Class DefaultAuthenticator.
@@ -44,7 +43,7 @@ public class DefaultAuthenticator extends AbstractAuthenticator {
 	private DigestAuthenticator digestAuthenticator;
 
     /** The spengo authenticator.(Windows only) */
-    private SpengoAuthenticator spengoAuthenticator;
+	//private SpengoAuthenticator spengoAuthenticator;
 
 	/**
 	 * Instantiates a new default authenticator.
@@ -52,9 +51,9 @@ public class DefaultAuthenticator extends AbstractAuthenticator {
 	public DefaultAuthenticator(){
 		this.basicAuthenticator = new BasicAuthenticator();
 		this.digestAuthenticator = new DigestAuthenticator();
-        if(System.getProperty("os.name").indexOf("Windows") > -1){
-            this.spengoAuthenticator = new SpengoAuthenticator();
-        }
+//        if(System.getProperty("os.name").indexOf("Windows") > -1){
+//            this.spengoAuthenticator = new SpengoAuthenticator();
+//        }
 	}
 
 	/**
@@ -80,10 +79,11 @@ public class DefaultAuthenticator extends AbstractAuthenticator {
 			schemeMap.put(challenge.getScheme(), challenge);
 		}
 		
-        if(this.spengoAuthenticator != null && schemeMap.containsKey(AuthScheme.Negotiate)){
-            this.spengoAuthenticator.init(this.websocket, this.credentials);
-            return this.spengoAuthenticator.getCredentials(schemeMap.get(AuthScheme.Negotiate));
-        }else if(schemeMap.containsKey(AuthScheme.Digest)){
+//        if(this.spengoAuthenticator != null && schemeMap.containsKey(AuthScheme.Negotiate)){
+//            this.spengoAuthenticator.init(this.websocket, this.credentials);
+//            return this.spengoAuthenticator.getCredentials(schemeMap.get(AuthScheme.Negotiate));
+//        }else 
+    	if(schemeMap.containsKey(AuthScheme.Digest)){
 			this.digestAuthenticator.init(this.websocket, this.credentials);
 			return this.digestAuthenticator.getCredentials(schemeMap.get(AuthScheme.Digest));
 		}else if(schemeMap.containsKey(AuthScheme.Basic)){

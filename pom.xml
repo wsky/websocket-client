@@ -51,16 +51,6 @@
       <version>${powermock.version}</version>
       <scope>test</scope>
    </dependency>
-   <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>jna</artifactId>
-      <version>${jna.version}</version>
-   </dependency>
-    <dependency>
-      <groupId>net.java.dev.jna</groupId>
-      <artifactId>platform</artifactId>
-      <version>${jna.version}</version>
-    </dependency>
   </dependencies>
   <build>
     <pluginManagement>
