@@ -196,6 +196,12 @@ public class WebSocketImpl extends WebSocketBase {
 					addHeader(sb, "Sec-WebSocket-Extensions", join(",", extensions));
 				}
 				addHeader(sb, "Sec-WebSocket-Version", String.valueOf(getWebSocketVersion()));
+				// extra headers
+				if(requestHeader != null) {
+					for (String h : requestHeader.getHeaderNames()) {
+						addHeader(sb, h, requestHeader.getHeaderValue(h));
+					}
+				}
 				sb.append("\r\n");
 				return ByteBuffer.wrap(sb.toString().getBytes());
 			}
