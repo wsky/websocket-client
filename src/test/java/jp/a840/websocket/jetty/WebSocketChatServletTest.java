@@ -29,54 +29,59 @@ import jp.a840.websocket.handler.WebSocketHandler;
 import jp.a840.websocket.WebSockets;
 import jp.a840.websocket.frame.Frame;
 
-
 /**
  * The Class WebSocketChatServletTest.
- *
+ * 
  * @author Takahiro Hashimoto
  */
 public class WebSocketChatServletTest {
-	
+
 	/**
 	 * The main method.
-	 *
-	 * @param argv the arguments
-	 * @throws Exception the exception
+	 * 
+	 * @param argv
+	 *            the arguments
+	 * @throws Exception
+	 *             the exception
 	 */
 	public static void main(String[] argv) throws Exception {
-//		System.setProperty("websocket.packatdump", String.valueOf(
-//				PacketDumpStreamHandler.ALL
-//		));
-//		System.setProperty("javax.net.debug", "all");
+		// System.setProperty("websocket.packatdump", String.valueOf(
+		// PacketDumpStreamHandler.ALL
+		// ));
+		// System.setProperty("javax.net.debug", "all");
 		System.setProperty("java.util.logging.config.file", "logging.properties");
-		WebSocket socket = WebSockets.createDraft06("ws://localhost:8080/ws/", (String)null, new WebSocketHandler() {
-			
+		WebSocket socket = WebSockets.create("ws://localhost:8080/frontend", (String) null, new WebSocketHandler() {
+
 			public void onOpen(WebSocket socket) {
 				System.err.println("Open");
 				try {
 					socket.send(socket.createFrame(System.getenv("USER") + ":has joined!"));
-				}catch(Exception e){
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			public void onMessage(WebSocket socket, Frame frame) {
-				if(!frame.toString().startsWith(System.getenv("USER"))){
+				if (!frame.toString().startsWith(System.getenv("USER"))) {
 					try {
 						socket.send(socket.createFrame(System.getenv("USER") + ":(echo)" + frame.toString()));
-					}catch(Exception e){
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 				System.out.println(frame);
 			}
-			
+
 			public void onError(WebSocket socket, WebSocketException e) {
 				e.printStackTrace();
 			}
-			
+
 			public void onClose(WebSocket socket) {
 				System.err.println("Closed");
+			}
+
+			public void onCloseFrame(WebSocket socket, int statusCode, String reason) {
+				System.err.println(String.format("closed: %s|%s", statusCode, reason));
 			}
 		}, "chat");
 		socket.setBlockingMode(true);

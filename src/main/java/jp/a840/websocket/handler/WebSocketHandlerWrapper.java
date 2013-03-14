@@ -72,5 +72,12 @@ public class WebSocketHandlerWrapper implements WebSocketHandler {
 	 */
 	public void onClose(WebSocket socket) {
 		handler_.onClose(socket);
+	}
+
+	/* (non-Javadoc)
+	 * @see jp.a840.websocket.handler.WebSocketHandler#onCloseFrame(jp.a840.websocket.WebSocket, int statusCode, String reasonText)
+	 */
+	public void onCloseFrame(WebSocket socket, int statusCode, String reasonText) {
+		handler_.onCloseFrame(socket, statusCode, reasonText);
 	}	
 }

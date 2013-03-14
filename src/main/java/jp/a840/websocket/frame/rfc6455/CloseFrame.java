@@ -23,22 +23,26 @@
  */
 package jp.a840.websocket.frame.rfc6455;
 
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+
 import jp.a840.websocket.frame.FrameHeader;
 import jp.a840.websocket.frame.rfc6455.FrameBuilderRfc6455.Opcode;
 
-
 /**
  * The Class ConnectionCloseFrame.
- *
+ * 
  * @author Takahiro Hashimoto
  */
 public class CloseFrame extends FrameRfc6455 {
 
 	/**
 	 * Instantiates a new connection close frame.
-	 *
-	 * @param header the header
-	 * @param bodyData the contents data
+	 * 
+	 * @param header
+	 *            the header
+	 * @param bodyData
+	 *            the contents data
 	 */
 	protected CloseFrame(FrameHeaderRfc6455 header, byte[] bodyData) {
 		super(header, bodyData);
@@ -47,9 +51,27 @@ public class CloseFrame extends FrameRfc6455 {
 	/**
 	 * Instantiates a new close frame.
 	 */
-	public CloseFrame(){
+	public CloseFrame() {
 		FrameHeader header = FrameBuilderRfc6455.createFrameHeader(null, false, Opcode.CONNECTION_CLOSE);
 		setHeader(header);
+	}
+
+	public CloseFrame(int statusCode, String reasonText) {
+		byte[] reasonBytes = reasonText.getBytes(Charset.forName("UTF-8"));
+		byte[] body = new byte[reasonBytes.length + 2];
+		ByteBuffer buffer = ByteBuffer.wrap(body);
+		buffer.putShort((short) statusCode);
+		buffer.put(reasonBytes);
+		setHeader(FrameBuilderRfc6455.createFrameHeader(body, false, Opcode.CONNECTION_CLOSE));
+		setContents(body);
+	}
+
+	public int getStatusCode() {
+		return ByteBuffer.wrap(this.contents).getShort();
+	}
+
+	public String getReasonText() {
+		return new String(this.contents, 2, this.contents.length - 2, Charset.forName("UTF-8"));
 	}
 
 }

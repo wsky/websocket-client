@@ -29,36 +29,63 @@ import jp.a840.websocket.frame.Frame;
 
 /**
  * The Class WebSocketHandlerAdapter.
- *
+ * 
  * @author Takahiro Hashimoto
  */
 abstract public class WebSocketHandlerAdapter implements WebSocketHandler {
 
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onClose(jp.a840.websocket.WebSocket)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onClose(jp.a840.websocket.
+	 * WebSocket)
 	 */
 	public void onClose(WebSocket socket) {
 		;
 	}
 
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onError(jp.a840.websocket.WebSocket, jp.a840.websocket.exception.WebSocketException)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onError(jp.a840.websocket.
+	 * WebSocket, jp.a840.websocket.exception.WebSocketException)
 	 */
 	public void onError(WebSocket socket, WebSocketException e) {
 		e.printStackTrace();
 	}
 
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onMessage(jp.a840.websocket.WebSocket, jp.a840.websocket.frame.Frame)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onMessage(jp.a840.websocket
+	 * .WebSocket, jp.a840.websocket.frame.Frame)
 	 */
 	public void onMessage(WebSocket socket, Frame frame) {
 		;
 	}
 
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onOpen(jp.a840.websocket.WebSocket)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onOpen(jp.a840.websocket.WebSocket
+	 * )
 	 */
 	public void onOpen(WebSocket socket) {
+		;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onCloseFrame(jp.a840.websocket
+	 * .WebSocket, int statusCode, String reasonText)
+	 */
+	public void onCloseFrame(WebSocket socket, int statusCode, String reasonText) {
 		;
 	}
 

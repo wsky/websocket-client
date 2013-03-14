@@ -35,6 +35,7 @@ import jp.a840.websocket.proxy.Proxy;
 import util.Base64;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -134,6 +135,8 @@ public class WebSocketImpl extends WebSocketBase {
 					if(state == State.WAIT){
 						chain.nextUpstreamHandler(ws, null, frame);
 					}
+					CloseFrame closeFrame=(CloseFrame)frame;
+					WebSocketImpl.this.handler.onCloseFrame(ws, closeFrame.getStatusCode(),closeFrame.getReasonText());
 					transitionTo(State.CLOSED);
 				} else {
 					WebSocketImpl.this.handler.onMessage(ws, frame);

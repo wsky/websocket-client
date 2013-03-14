@@ -31,104 +31,122 @@ import jp.a840.websocket.frame.Frame;
 import jp.a840.websocket.handler.WebSocketHandler;
 import jp.a840.websocket.util.PacketDumpUtil;
 
-
 /**
  * The Class WebSocketHandlerMock.
- *
+ * 
  * @author Takahiro Hashimoto
  */
 public class WebSocketHandlerMock implements WebSocketHandler {
-	
+
 	/** The on open list. */
 	private List<List<Object>> onOpenList = new ArrayList<List<Object>>();
-	
+
 	/** The on message list. */
 	private List<List<Object>> onMessageList = new ArrayList<List<Object>>();
-	
+
 	/** The on error list. */
 	private List<List<Object>> onErrorList = new ArrayList<List<Object>>();
-	
+
 	/** The on close list. */
 	private List<List<Object>> onCloseList = new ArrayList<List<Object>>();
-	
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onOpen(jp.a840.websocket.WebSocket)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onOpen(jp.a840.websocket.WebSocket
+	 * )
 	 */
 	synchronized public void onOpen(WebSocket socket) {
 		List<Object> args = new ArrayList<Object>();
 		args.add(socket);
-		
+
 		onOpenList.add(args);
 	}
-	
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onMessage(jp.a840.websocket.WebSocket, jp.a840.websocket.frame.Frame)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onMessage(jp.a840.websocket
+	 * .WebSocket, jp.a840.websocket.frame.Frame)
 	 */
-    synchronized public void onMessage(WebSocket socket, Frame frame) {
+	synchronized public void onMessage(WebSocket socket, Frame frame) {
 		List<Object> args = new ArrayList<Object>();
 		args.add(socket);
 		args.add(frame);
-		
+
 		PacketDumpUtil.printPacketDump("frame", frame.getContents());
 
 		onMessageList.add(args);
 	}
 
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onError(jp.a840.websocket.WebSocket, jp.a840.websocket.exception.WebSocketException)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onError(jp.a840.websocket.
+	 * WebSocket, jp.a840.websocket.exception.WebSocketException)
 	 */
-    synchronized public void onError(WebSocket socket, WebSocketException e) {
+	synchronized public void onError(WebSocket socket, WebSocketException e) {
 		List<Object> args = new ArrayList<Object>();
 		args.add(socket);
 		args.add(e);
 
 		onErrorList.add(args);
 	}
-	
-	/* (non-Javadoc)
-	 * @see jp.a840.websocket.handler.WebSocketHandler#onClose(jp.a840.websocket.WebSocket)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * jp.a840.websocket.handler.WebSocketHandler#onClose(jp.a840.websocket.
+	 * WebSocket)
 	 */
-    synchronized public void onClose(WebSocket socket) {
+	synchronized public void onClose(WebSocket socket) {
 		List<Object> args = new ArrayList<Object>();
-		args.add(socket);		
+		args.add(socket);
 
 		onCloseList.add(args);
 	}
 
+	synchronized public void onCloseFrame(WebSocket socket, int statusCode, String reason) {
+
+	}
+
 	/**
 	 * Gets the on open list.
-	 *
+	 * 
 	 * @return the on open list
 	 */
-    synchronized public List<List<Object>> getOnOpenList() {
+	synchronized public List<List<Object>> getOnOpenList() {
 		return onOpenList;
 	}
 
 	/**
 	 * Gets the on message list.
-	 *
+	 * 
 	 * @return the on message list
 	 */
-    synchronized public List<List<Object>> getOnMessageList() {
+	synchronized public List<List<Object>> getOnMessageList() {
 		return onMessageList;
 	}
 
 	/**
 	 * Gets the on error list.
-	 *
+	 * 
 	 * @return the on error list
 	 */
-    synchronized public List<List<Object>> getOnErrorList() {
+	synchronized public List<List<Object>> getOnErrorList() {
 		return onErrorList;
 	}
 
 	/**
 	 * Gets the on close list.
-	 *
+	 * 
 	 * @return the on close list
 	 */
-    synchronized public List<List<Object>> getOnCloseList() {
+	synchronized public List<List<Object>> getOnCloseList() {
 		return onCloseList;
 	}
-
 }

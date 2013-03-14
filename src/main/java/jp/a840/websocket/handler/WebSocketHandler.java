@@ -29,39 +29,56 @@ import jp.a840.websocket.frame.Frame;
 
 /**
  * The Interface WebSocketHandler.
- *
+ * 
  * @author Takahiro Hashimoto
  */
 public interface WebSocketHandler {
-	
+
 	/**
 	 * On open.
-	 *
-	 * @param socket the socket
+	 * 
+	 * @param socket
+	 *            the socket
 	 */
 	public void onOpen(WebSocket socket);
-	
+
 	/**
 	 * On message.
-	 *
-	 * @param socket the socket
-	 * @param frame the frame
+	 * 
+	 * @param socket
+	 *            the socket
+	 * @param frame
+	 *            the frame
 	 */
 	public void onMessage(WebSocket socket, Frame frame);
-	
+
 	/**
 	 * On error.
-	 *
-	 * @param socket the socket
-	 * @param e the e
+	 * 
+	 * @param socket
+	 *            the socket
+	 * @param e
+	 *            the e
 	 */
 	public void onError(WebSocket socket, WebSocketException e);
-	
+
 	/**
 	 * On close.
-	 *
-	 * @param socket the socket
+	 * 
+	 * @param socket
+	 *            the socket
 	 */
 	public void onClose(WebSocket socket);
+
+	/**
+	 * On close frame.
+	 * 
+	 * @param socket
+	 *            the socket
+	 * @param statusCode
+	 * @param reasonText
+	 */
+	// maybe not well design, onMessage should contain closeframe?
+	public void onCloseFrame(WebSocket socket, int statusCode, String reasonText);
 
 }

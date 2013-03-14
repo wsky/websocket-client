@@ -92,6 +92,11 @@ public class WebSocketEchoProxyTest {
 			public void onClose(WebSocket socket) {
 				System.err.println("Closed");
 			}
+
+			public void onCloseFrame(WebSocket socket, int statusCode, String reason) {
+				// TODO Auto-generated method stub
+				
+			}
 		});
 		socket.setBlockingMode(true);
 		socket.connect();
