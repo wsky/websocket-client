@@ -67,11 +67,12 @@ public class CloseFrame extends FrameRfc6455 {
 	}
 
 	public int getStatusCode() {
-		return ByteBuffer.wrap(this.contents).getShort();
+		return this.contents.length < 2 ? 0 : ByteBuffer.wrap(this.contents).getShort();
 	}
 
 	public String getReasonText() {
-		return new String(this.contents, 2, this.contents.length - 2, Charset.forName("UTF-8"));
+		return this.contents.length <= 2 ? null : 
+			new String(this.contents, 2, this.contents.length - 2, Charset.forName("UTF-8"));
 	}
 
 }
