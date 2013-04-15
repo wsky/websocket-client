@@ -426,7 +426,7 @@ public class FrameBuilderRfc6455 {
             payloadLength = body.length;
         }
         PayloadLengthType payloadLengthType = PayloadLengthType.valueOf(payloadLength);
-        return new FrameHeaderRfc6455(false, 2, payloadLengthType, (int) payloadLength, opcode);
+        return new FrameHeaderRfc6455(fragmented, 2, payloadLengthType, (int) payloadLength, opcode);
     }
 
     /**
