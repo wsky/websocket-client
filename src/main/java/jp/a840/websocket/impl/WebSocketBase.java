@@ -41,6 +41,7 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import jp.a840.websocket.HttpHeader;
@@ -617,13 +618,13 @@ abstract public class WebSocketBase implements WebSocket {
 					} finally {
 						try {							
 							socket.close();
-						} catch (IOException e) {
-							;
+						} catch (IOException ex) {
+							log.log(Level.INFO,"close socket error", ex);
 						}
 						try {
 							selector.close();
-						} catch (IOException e) {
-							;
+						} catch (IOException ex) {
+							log.log(Level.INFO,"close selector error", ex);
 						}
 						handler.onClose(WebSocketBase.this);
 						handshakeLatch.countDown();
@@ -655,10 +656,18 @@ abstract public class WebSocketBase implements WebSocket {
 				handshakeLatch.await();
 			}
 
-		} catch (WebSocketException we) {
-			handler.onError(this, we);
 		} catch (Exception e) {
-			handler.onError(this, new WebSocketException(E3044, e));
+			try {							
+				socket.close();
+			} catch (IOException ex) {
+				log.log(Level.INFO,"close socket error", ex);
+			}
+			try {
+				selector.close();
+			} catch (IOException ex) {
+				log.log(Level.INFO,"close selector error", ex);
+			}
+			throw new WebSocketException(E3044, e);
 		}
 	}
 
