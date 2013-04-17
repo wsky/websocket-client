@@ -394,7 +394,7 @@ public class FrameBuilderRfc6455 {
         long payloadLength2 = payloadLength1;
         switch (payloadLengthType) {
             case LEN_16:
-                payloadLength2 = 0xFFFF & (chunkData.get() << 8 | chunkData.get());
+                payloadLength2 =  ((chunkData.get()&0xFF)<<8) | (chunkData.get()&0xFF);
                 break;
             case LEN_63:
                 payloadLength2 = 0x7FFFFFFFFFFFFFFFL & chunkData.getLong();
@@ -404,7 +404,7 @@ public class FrameBuilderRfc6455 {
         if (payloadLength2 > Integer.MAX_VALUE) {
             throw new IllegalArgumentException("large data is not support yet");
         }
-
+        
         if (Opcode.CONTINUATION.equals(opcode) && previousHeader != null) {
             return new FrameHeaderRfc6455(fragmented, 2, payloadLengthType, (int) payloadLength2, opcode, previousHeader.getOpcode());
         } else {
