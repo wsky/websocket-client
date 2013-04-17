@@ -362,6 +362,10 @@ public class MockServer extends Thread {
 		 * @see jp.a840.websocket.MockServer.VerifyRequest#verify(java.nio.ByteBuffer)
 		 */
 		public void verify(ByteBuffer request){
+			if(version == 13) {
+				delegate.verify(request);
+				return;
+			}
 			ByteBuffer unmaskedBuffer = ByteBuffer.allocate(request.remaining() - 4);
 			byte[] seed = new byte[4];
             if(version > 6){

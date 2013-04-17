@@ -29,12 +29,14 @@ import jp.a840.websocket.frame.Maskable;
 import jp.a840.websocket.frame.rfc6455.FrameBuilderRfc6455.Opcode;
 
 import java.nio.ByteBuffer;
+import java.util.Random;
 
 /**
- *  WebSocket Frame class
- *
- *  Frame (RFC6455)
- *  <pre>
+ * WebSocket Frame class
+ * 
+ * Frame (RFC6455)
+ * 
+ * <pre>
  *  0                   1                   2                   3
  *  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
  * +-+-+-+-+-------+-+-------------+-------------------------------+
@@ -54,64 +56,83 @@ import java.nio.ByteBuffer;
  * |                     Payload Data continued ...                |
  * +---------------------------------------------------------------+
  * </pre>
- * payload length = extention data length + application data length.
- * the extention data length may be zero.
- *
+ * 
+ * payload length = extention data length + application data length. the
+ * extention data length may be zero.
+ * 
  * Support WebSocket Draft06 specification.
- *
+ * 
  * @author t-hashimoto
- *
+ * 
  */
 abstract public class FrameRfc6455 extends Frame implements Maskable {
 
+	private boolean mask;
+
+	private static Random random = new Random();
+
 	/**
 	 * Instantiates a new frame draft06.
 	 */
-	protected FrameRfc6455(){
+	protected FrameRfc6455() {
 	}
 
 	/**
 	 * Instantiates a new frame draft06.
-	 *
-	 * @param header the header
-	 * @param bodyData the contents data
+	 * 
+	 * @param header
+	 *            the header
+	 * @param bodyData
+	 *            the contents data
 	 */
-	protected FrameRfc6455(FrameHeader header, byte[] bodyData){
+	protected FrameRfc6455(FrameHeader header, byte[] bodyData) {
 		super(header, bodyData);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see jp.a840.websocket.frame.Frame#toByteBuffer()
 	 */
-	public ByteBuffer toByteBuffer(){
+	public ByteBuffer toByteBuffer() {
 		ByteBuffer headerBuffer = header.toByteBuffer();
 		int bodyLength = 0;
-		if(contents != null){
+		if (contents != null) {
 			bodyLength = contents.length;
 		}
-		ByteBuffer buf = ByteBuffer.allocate(headerBuffer.limit() + bodyLength); // mask-key + header + contents
+		// mask-key+header+contents
+		ByteBuffer buf = ByteBuffer.allocate(headerBuffer.limit() + bodyLength + (this.mask ? 4 : 0));
 		buf.put(headerBuffer);
-		if(contents != null){
+		if (this.mask) {
+			byte[] maskkey = new byte[4];
+			ByteBuffer.wrap(maskkey).putInt(random.nextInt());
+			buf.put(maskkey);
+			if (contents != null) {
+				for (int i = 0; i < contents.length; i++) {
+					buf.put((byte) (contents[i] ^ maskkey[i % 4]));
+				}
+			}
+		} else if (contents != null) {
 			buf.put(contents);
 		}
 		buf.flip();
 		return buf;
 	}
-	
+
 	/**
 	 * Checks if is continuation frame.
-	 *
+	 * 
 	 * @return true, if is continuation frame
 	 */
-	public boolean isContinuationFrame(){
-		return ((FrameHeaderRfc6455)header).getOpcode().equals(Opcode.CONTINUATION);
+	public boolean isContinuationFrame() {
+		return ((FrameHeaderRfc6455) header).getOpcode().equals(Opcode.CONTINUATION);
 	}
 
-    public void unmask(){
-        ((FrameHeaderRfc6455)header).setMask(false);
-    }
+	public void unmask() {
+		((FrameHeaderRfc6455) header).setMask(this.mask = false);
+	}
 
-    public void mask(){
-        ((FrameHeaderRfc6455)header).setMask(true);
-    }
+	public void mask() {
+		((FrameHeaderRfc6455) header).setMask(this.mask = true);
+	}
 }

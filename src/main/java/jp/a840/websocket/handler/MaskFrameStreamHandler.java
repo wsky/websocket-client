@@ -29,6 +29,8 @@ import java.util.Random;
 import jp.a840.websocket.WebSocket;
 import jp.a840.websocket.exception.WebSocketException;
 import jp.a840.websocket.frame.Frame;
+import jp.a840.websocket.frame.rfc6455.FrameRfc6455;
+import jp.a840.websocket.impl.WebSocketImpl;
 
 /**
  * The Class MaskFrameStreamHandler.
@@ -45,7 +47,13 @@ public class MaskFrameStreamHandler extends StreamHandlerAdapter {
 	@Override
 	public void nextUpstreamHandler(WebSocket ws, ByteBuffer buffer,
 			Frame frame, StreamHandlerChain chain) throws WebSocketException {
-		ByteBuffer buf = ByteBuffer.allocate(4 + buffer.remaining()); // mask-key + header + contents
+		// just for rfc6455
+		if(ws instanceof WebSocketImpl){
+			chain.nextUpstreamHandler(ws, buffer, frame);
+			return;
+		}
+		// mask-key + header + contents
+		ByteBuffer buf = ByteBuffer.allocate(4 + buffer.remaining());
         int limit = buffer.limit();
         buffer.limit(buffer.position() + 2);
         buf.put(buffer);
