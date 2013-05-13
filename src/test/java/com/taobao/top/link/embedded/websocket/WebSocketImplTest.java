@@ -39,9 +39,9 @@ import com.taobao.top.link.embedded.websocket.frame.rfc6455.CloseFrame;
 import com.taobao.top.link.embedded.websocket.frame.rfc6455.TextFrame;
 import com.taobao.top.link.embedded.websocket.impl.WebSocketImpl;
 import com.taobao.top.link.embedded.websocket.proxy.Proxy;
+import com.taobao.top.link.embedded.websocket.util.Base64;
 import com.taobao.top.link.embedded.websocket.util.PacketDumpUtil;
 
-import util.Base64;
 
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;

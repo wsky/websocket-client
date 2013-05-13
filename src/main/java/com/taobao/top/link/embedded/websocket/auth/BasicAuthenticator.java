@@ -26,8 +26,8 @@ package com.taobao.top.link.embedded.websocket.auth;
 import java.util.List;
 
 import com.taobao.top.link.embedded.websocket.exception.WebSocketException;
+import com.taobao.top.link.embedded.websocket.util.Base64;
 
-import util.Base64;
 
 
 /**

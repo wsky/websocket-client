@@ -1,4 +1,4 @@
-package util;
+package com.taobao.top.link.embedded.websocket.util;
 
 import java.util.Arrays;
 

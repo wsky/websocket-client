@@ -48,9 +48,9 @@ import com.taobao.top.link.embedded.websocket.frame.draft06.CloseFrame;
 import com.taobao.top.link.embedded.websocket.frame.draft06.TextFrame;
 import com.taobao.top.link.embedded.websocket.impl.WebSocketDraft06;
 import com.taobao.top.link.embedded.websocket.proxy.Proxy;
+import com.taobao.top.link.embedded.websocket.util.Base64;
 import com.taobao.top.link.embedded.websocket.util.PacketDumpUtil;
 
-import util.Base64;
 
 /**
  * The Class WebSocketDraft06Test.

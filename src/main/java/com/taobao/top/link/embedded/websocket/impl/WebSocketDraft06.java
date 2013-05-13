@@ -44,8 +44,8 @@ import com.taobao.top.link.embedded.websocket.frame.draft06.TextFrame;
 import com.taobao.top.link.embedded.websocket.handler.*;
 import com.taobao.top.link.embedded.websocket.handshake.Handshake;
 import com.taobao.top.link.embedded.websocket.proxy.Proxy;
+import com.taobao.top.link.embedded.websocket.util.Base64;
 
-import util.Base64;
 import static com.taobao.top.link.embedded.websocket.exception.ErrorCode.*;
 
 
