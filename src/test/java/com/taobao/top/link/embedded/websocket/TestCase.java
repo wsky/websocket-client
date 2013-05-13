@@ -23,6 +23,8 @@
  */
 package com.taobao.top.link.embedded.websocket;
 
+import org.junit.Test;
+
 
 /**
  * The Class TestCase.
@@ -36,5 +38,10 @@ public class TestCase {
 	 */
 	public TestCase(){
 		System.setProperty("java.util.logging.config.file", "logging.properties");
+	}
+	
+	@Test
+	public void test() {
+		
 	}
 }
