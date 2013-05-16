@@ -45,6 +45,7 @@ import javax.net.ssl.*;
 import javax.net.ssl.SSLEngineResult.HandshakeStatus;
 import javax.net.ssl.SSLEngineResult.Status;
 
+import com.taobao.top.link.embedded.websocket.WebSocket;
 import com.taobao.top.link.embedded.websocket.exception.WebSocketException;
 import com.taobao.top.link.embedded.websocket.util.PacketDumpUtil;
 
@@ -91,13 +92,15 @@ public class SSLHandshake {
     private static final int BUFFER_UNDERFLOW_MAX_RETRY_COUNT = 5;
     private int increaseBufferCount = 1;
 
+    private WebSocket webSocket;
+    
     /**
      * Instantiates a new sSL handshake.
      *
      * @param endpoint the endpoint
      * @throws WebSocketException the web socket exception
      */
-    public SSLHandshake(InetSocketAddress endpoint) throws WebSocketException {
+    public SSLHandshake(InetSocketAddress endpoint, WebSocket webSocket) throws WebSocketException {
         try {
             this.ctx = SSLContext.getInstance("TLS");
             TrustManagerFactory tmf = TrustManagerFactory
@@ -110,6 +113,7 @@ public class SSLHandshake {
                     endpoint.getPort());
             this.engine.setUseClientMode(true);
             this.currentBufferSize = this.engine.getSession().getPacketBufferSize();
+            this.webSocket = webSocket;
         } catch (NoSuchAlgorithmException e) {
             throw new WebSocketException(E3810, e);
         } catch (KeyStoreException e) {
@@ -186,7 +190,7 @@ public class SSLHandshake {
                         }, hb);
                         hb.netBuffer.flip();
                         if (hb.netBuffer.hasRemaining()) {
-                            if (PacketDumpUtil.isDump(PacketDumpUtil.HS_UP)) {
+                            if (PacketDumpUtil.isDump(this.webSocket, PacketDumpUtil.HS_UP)) {
                                 PacketDumpUtil.printPacketDump("SSL_HS_UP", hb.netBuffer);
                             }
                             socket.write(hb.netBuffer);
@@ -197,7 +201,7 @@ public class SSLHandshake {
                         selector.select();
                         socket.read(hb.netBuffer);
                         hb.netBuffer.flip();
-                        if (PacketDumpUtil.isDump(PacketDumpUtil.HS_DOWN)) {
+                        if (PacketDumpUtil.isDump(this.webSocket, PacketDumpUtil.HS_DOWN)) {
                             PacketDumpUtil.printPacketDump("SSL_HS_DOWN", hb.netBuffer);
                         }
                         SSLEngineResult res = null;

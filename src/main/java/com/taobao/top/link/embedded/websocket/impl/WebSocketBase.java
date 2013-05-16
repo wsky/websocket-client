@@ -99,7 +99,7 @@ abstract public class WebSocketBase implements WebSocket {
 	private boolean blockingMode = true;
 
 	/** The packet dump mode. */
-	private static int packetDumpMode;
+	private int packetDumpMode;
 	
 	/** quit flag. */
 	volatile protected boolean quit;
@@ -298,7 +298,7 @@ abstract public class WebSocketBase implements WebSocket {
 		});
 		
 		if(this.useSsl){
-			this.sslHandshake = new SSLHandshake(this.endpointAddress);
+			this.sslHandshake = new SSLHandshake(this.endpointAddress, this);
 			this.pipeline.addStreamHandler(new PacketDumpStreamHandler());
 			this.pipeline.addStreamHandler(new SSLStreamHandler(this.sslHandshake, this.bufferSize));
 		}
@@ -1025,8 +1025,8 @@ abstract public class WebSocketBase implements WebSocket {
 	 *
 	 * @return the packet dump mode
 	 */
-	public static int getPacketDumpMode() {
-		return packetDumpMode;
+	public int getPacketDumpMode() {
+		return this.packetDumpMode;
 	}
 
 	/**
@@ -1034,8 +1034,8 @@ abstract public class WebSocketBase implements WebSocket {
 	 *
 	 * @param packetDumpMode the new packet dump mode
 	 */
-	public static void setPacketDumpMode(int packetDumpMode) {
-		WebSocketBase.packetDumpMode = packetDumpMode;
+	public void setPacketDumpMode(int packetDumpMode) {
+		this.packetDumpMode = packetDumpMode;
 	}
 
 }

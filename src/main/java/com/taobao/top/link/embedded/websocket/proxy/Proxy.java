@@ -188,7 +188,7 @@ public class Proxy {
 			this.authenticator.init(ws, this.credentials);
 		}
 		
-		ProxyHandshake proxyHandshake = new ProxyHandshake(proxy, ws.getEndpoint(), this.authenticator);
+		ProxyHandshake proxyHandshake = new ProxyHandshake(proxy, ws.getEndpoint(), this.authenticator, ws);
 		return proxyHandshake;
 	}
 }

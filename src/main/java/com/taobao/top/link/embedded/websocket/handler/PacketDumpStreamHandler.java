@@ -68,7 +68,7 @@ public class PacketDumpStreamHandler implements StreamHandler {
 	 */
 	public void nextDownstreamHandler(WebSocket ws, ByteBuffer buffer,
 			Frame frame, StreamHandlerChain chain) throws WebSocketException {
-		if(PacketDumpUtil.isDump(FR_DOWN)){
+		if(PacketDumpUtil.isDump(ws, FR_DOWN)){
 			PacketDumpUtil.printPacketDump("FR Downstream",buffer);
 		}
 		chain.nextDownstreamHandler(ws, buffer, frame);
@@ -79,7 +79,7 @@ public class PacketDumpStreamHandler implements StreamHandler {
 	 */
 	public void nextHandshakeDownstreamHandler(WebSocket ws, ByteBuffer buffer,
 			StreamHandlerChain chain) throws WebSocketException {
-		if(PacketDumpUtil.isDump(HS_DOWN)){
+		if(PacketDumpUtil.isDump(ws, HS_DOWN)){
 			PacketDumpUtil.printPacketDump("HS Downstream",buffer);
 		}
 		chain.nextHandshakeDownstreamHandler(ws, buffer);
@@ -90,7 +90,7 @@ public class PacketDumpStreamHandler implements StreamHandler {
 	 */
 	public void nextHandshakeUpstreamHandler(WebSocket ws, ByteBuffer buffer,
 			StreamHandlerChain chain) throws WebSocketException {
-		if(PacketDumpUtil.isDump(HS_UP)){
+		if(PacketDumpUtil.isDump(ws, HS_UP)){
 			PacketDumpUtil.printPacketDump("HS Upstream", buffer);
 		}
 		chain.nextHandshakeUpstreamHandler(ws, buffer);
@@ -101,7 +101,7 @@ public class PacketDumpStreamHandler implements StreamHandler {
 	 */
 	public void nextUpstreamHandler(WebSocket ws, ByteBuffer buffer,
 			Frame frame, StreamHandlerChain chain) throws WebSocketException {
-		if(PacketDumpUtil.isDump(FR_UP)){
+		if(PacketDumpUtil.isDump(ws, FR_UP)){
 			PacketDumpUtil.printPacketDump("FR Upstream", buffer);
 		}
 		chain.nextUpstreamHandler(ws, buffer, frame);

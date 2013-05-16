@@ -27,6 +27,7 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.util.logging.Logger;
 
+import com.taobao.top.link.embedded.websocket.WebSocket;
 import com.taobao.top.link.embedded.websocket.impl.WebSocketBase;
 
 
@@ -61,9 +62,19 @@ public class PacketDumpUtil {
 	 * @param mode the mode
 	 * @return true, if is dump
 	 */
-	public static boolean isDump(int mode){
-		return (WebSocketBase.getPacketDumpMode() & mode) > 0;
+	public static boolean isDump(WebSocket ws, int mode){
+		return (((WebSocketBase)ws).getPacketDumpMode() & mode) > 0;
 	}
+	
+//	/**
+//	 * Checks if is dump.
+//	 *
+//	 * @param mode the mode
+//	 * @return true, if is dump
+//	 */
+//	public static boolean isDump(int mode){
+//		return (WebSocketBase.getPacketDumpMode() & mode) > 0;
+//	}
 
 	/**
 	 * Prints the packet dump.

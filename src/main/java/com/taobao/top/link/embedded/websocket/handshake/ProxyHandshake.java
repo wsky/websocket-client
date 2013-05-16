@@ -37,6 +37,7 @@ import java.util.EnumSet;
 //import java.util.logging.Logger;
 
 import com.taobao.top.link.embedded.websocket.BufferManager;
+import com.taobao.top.link.embedded.websocket.WebSocket;
 import com.taobao.top.link.embedded.websocket.auth.Authenticator;
 import com.taobao.top.link.embedded.websocket.exception.WebSocketException;
 import com.taobao.top.link.embedded.websocket.util.PacketDumpUtil;
@@ -86,6 +87,8 @@ public class ProxyHandshake {
 	
 	/** The http response header parser. */
 	private HttpResponseHeaderParser httpResponseHeaderParser;
+	
+	private WebSocket webSocket;
 
 	/**
 	 * The Enum State.
@@ -162,9 +165,10 @@ public class ProxyHandshake {
 	 * @param proxy the proxy
 	 * @param origin the origin
 	 */
-	public ProxyHandshake(InetSocketAddress proxy, InetSocketAddress origin){
+	public ProxyHandshake(InetSocketAddress proxy, InetSocketAddress origin, WebSocket webSocket){
 		this.proxyAddress = proxy;
 		this.originAddress = origin;
+		this.webSocket = webSocket;
 	}
 
 	/**
@@ -174,10 +178,11 @@ public class ProxyHandshake {
 	 * @param origin the origin
 	 * @param authenticator the authenticator
 	 */
-	public ProxyHandshake(InetSocketAddress proxy, InetSocketAddress origin, Authenticator authenticator){
+	public ProxyHandshake(InetSocketAddress proxy, InetSocketAddress origin, Authenticator authenticator, WebSocket webSocket){
 		this.proxyAddress = proxy;
 		this.originAddress = origin;
 		this.authenticator = authenticator;
+		this.webSocket = webSocket;
 	}
 
 	/**
@@ -198,7 +203,7 @@ public class ProxyHandshake {
 			String method = "CONNECT";
 			String host = originAddress.getHostName() + ":" + originAddress.getPort();
 			ByteBuffer request = createHandshakeRequest(method, host);
-			if(PacketDumpUtil.isDump(PacketDumpUtil.HS_UP)){
+			if(PacketDumpUtil.isDump(this.webSocket, PacketDumpUtil.HS_UP)){
 				PacketDumpUtil.printPacketDump("PROXY_HS_UP", request);
 			}
 			socket.write(request);
@@ -213,7 +218,7 @@ public class ProxyHandshake {
 				responseBuffer.clear();
 				socket.read(responseBuffer);
 				responseBuffer.flip();
-				if(PacketDumpUtil.isDump(PacketDumpUtil.HS_DOWN)){
+				if(PacketDumpUtil.isDump(this.webSocket, PacketDumpUtil.HS_DOWN)){
 					PacketDumpUtil.printPacketDump("PROXY_HS_DOWN", responseBuffer);
 				}
 				
@@ -248,7 +253,7 @@ public class ProxyHandshake {
 					break;
 				case AUTH:
 					ByteBuffer buffer = createAuthorizeRequest(creadectialsStr);
-					if(PacketDumpUtil.isDump(PacketDumpUtil.HS_UP)){
+					if(PacketDumpUtil.isDump(this.webSocket, PacketDumpUtil.HS_UP)){
 						PacketDumpUtil.printPacketDump("PROXY_HS_UP", buffer);
 					}
 					socket.write(buffer);
