@@ -32,8 +32,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -103,10 +101,7 @@ public class SSLHandshake {
     public SSLHandshake(InetSocketAddress endpoint, WebSocket webSocket) throws WebSocketException {
         try {
             this.ctx = SSLContext.getInstance("TLS");
-            TrustManagerFactory tmf = TrustManagerFactory
-                    .getInstance("SunX509");
-            tmf.init((KeyStore) null);
-            this.ctx.init(null, tmf.getTrustManagers(), null);
+            this.ctx.init(null, new TrustManager[] { new X509AlwaysTrustManager() }, null);
 
             // Create SSLEngine
             this.engine = this.ctx.createSSLEngine(endpoint.getHostName(),
@@ -116,8 +111,6 @@ public class SSLHandshake {
             this.webSocket = webSocket;
         } catch (NoSuchAlgorithmException e) {
             throw new WebSocketException(E3810, e);
-        } catch (KeyStoreException e) {
-            throw new WebSocketException(E3811, e);
         } catch (KeyManagementException e) {
             throw new WebSocketException(E3812, e);
         }
