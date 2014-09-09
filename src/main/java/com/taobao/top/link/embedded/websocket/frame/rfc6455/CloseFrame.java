@@ -23,12 +23,11 @@
  */
 package com.taobao.top.link.embedded.websocket.frame.rfc6455;
 
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 
 import com.taobao.top.link.embedded.websocket.frame.FrameHeader;
 import com.taobao.top.link.embedded.websocket.frame.rfc6455.FrameBuilderRfc6455.Opcode;
-
 
 /**
  * The Class ConnectionCloseFrame.
@@ -36,7 +35,7 @@ import com.taobao.top.link.embedded.websocket.frame.rfc6455.FrameBuilderRfc6455.
  * @author Takahiro Hashimoto
  */
 public class CloseFrame extends FrameRfc6455 {
-
+	
 	/**
 	 * Instantiates a new connection close frame.
 	 * 
@@ -48,7 +47,7 @@ public class CloseFrame extends FrameRfc6455 {
 	protected CloseFrame(FrameHeaderRfc6455 header, byte[] bodyData) {
 		super(header, bodyData);
 	}
-
+	
 	/**
 	 * Instantiates a new close frame.
 	 */
@@ -56,9 +55,14 @@ public class CloseFrame extends FrameRfc6455 {
 		FrameHeader header = FrameBuilderRfc6455.createFrameHeader(null, false, Opcode.CONNECTION_CLOSE);
 		setHeader(header);
 	}
-
+	
 	public CloseFrame(int statusCode, String reasonText) {
-		byte[] reasonBytes = reasonText.getBytes(Charset.forName("UTF-8"));
+		byte[] reasonBytes;
+		try {
+			reasonBytes = reasonText.getBytes("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 		byte[] body = new byte[reasonBytes.length + 2];
 		ByteBuffer buffer = ByteBuffer.wrap(body);
 		buffer.putShort((short) statusCode);
@@ -66,14 +70,18 @@ public class CloseFrame extends FrameRfc6455 {
 		setHeader(FrameBuilderRfc6455.createFrameHeader(body, false, Opcode.CONNECTION_CLOSE));
 		setContents(body);
 	}
-
+	
 	public int getStatusCode() {
 		return this.contents.length < 2 ? 0 : ByteBuffer.wrap(this.contents).getShort();
 	}
-
+	
 	public String getReasonText() {
-		return this.contents.length <= 2 ? null : 
-			new String(this.contents, 2, this.contents.length - 2, Charset.forName("UTF-8"));
+		try {
+			return this.contents.length <= 2 ? null :
+					new String(this.contents, 2, this.contents.length - 2, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			throw new RuntimeException(e);
+		}
 	}
-
+	
 }
